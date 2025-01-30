@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tematik Agro, Niaga, & Desa untuk Karimun</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <!-- Link ke file CSS -->
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 font-sans">
+     <!-- Navbar -->
+    <nav class="navbar">
+    <div class="logo">Tematik Agro, Niaga, & Desa untuk Karimun</div>
+    <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
+    <ul class="menu">
+        <li><a href="https:/radhyaksa.github.io/dashboard/">Home</a></li>
+        <li><a href="https://radhyaksa.github.io/mukapeta/">See Fullscreen Map</a></li>
+        <li><a href="https://karimunkab.bps.go.id/">Contact</a></li>
+    </ul>
+    </nav>
+    <!-- Main Content -->
+    <div class="container mx-auto mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Peta -->
+    <div class="bg-white p-4 shadow rounded">
+      <h2 class="text-lg font-semibold mb-4">Peta Interaktif</h2>
+      <iframe src="https://radhyaksa.github.io/mukapeta/" class="w-full h-80 border rounded" allowfullscreen></iframe>
+    </div>
+
+    <!-- Diagram -->
+    <div class="bg-white p-4 shadow rounded">
+        <h2 class="text-lg font-semibold mb-4">Diagram Infografis</h2>
+        <!-- <canvas id="chart" class="w-full h-80"></canvas> -->
+        <h2 class="text-lg font-semibold mb-4" style="text-align: center;">Jumlah UMKM per Kecamatan berdasarkan Kategori Lapangan Usaha</h2>
+        <canvas id="stackedBarChart" width="800" height="400"></canvas>
+    </div>
+
+    <script>
+        // Labels untuk sumbu X (Kecamatan)
+        const labels = ["Moro","Durai","Sugie Besar", "Kundur", "Kundur Utara", "Kundur Barat","Ungar", "Belat","Karimun","Buru","Meral","Tebing","Meral Barat","Selat Gelam"
+        ];
+    
+        // Data kategori usaha per Kecamatan
+        const dataumkm = {
+            "B": [17,2,6,3,0,1,2,3,3,0,2,2,9,1,51],
+            "C": [204,187,149,496,210,389,151,89,575,311,602,380,112,124,3979],
+            "D": [11,6,27,13,2,0,1,4,8,6,6,4,4,4,96],
+            "E": [6,1,3,13,26,10,6,1,67,10,16,12,1,5,177],
+            "F": [2,0,1,7,4,12,0,0,11,1,29,12,7,2,88],
+            "G": [425,239,211,1115,369,523,201,184,1807,333,1180,729,422,105,7843],
+            "H": [30,24,9,109,34,31,49,36,114,31,63,22,10,37,599],
+            "I": [206,103,77,441,125,255,60,59,1011,87,493,394,259,44,3614],
+            "J": [13,19,5,30,4,20,23,2,59,10,48,27,16,5,281],
+            "K": [4,3,1,8,5,3,6,8,29,1,4,1,0,1,74],
+            "L": [13,0,3,53,11,11,9,3,157,3,78,52,11,2,406],
+            "M": [1,0,0,8,2,2,0,3,27,0,14,5,0,1,63],
+            "N": [2,4,0,29,19,22,3,2,41,8,46,29,20,2,227],
+            "P": [1,1,2,41,21,29,18,17,87,2,50,32,6,5,312],
+            "Q": [1,1,0,32,11,13,5,0,38,0,27,5,1,3,137],
+            "R": [2,1,0,22,6,6,3,1,20,2,7,5,1,0,76],
+            "S": [64,24,7,145,63,61,15,15,281,52,172,152,59,10,1120]
+        };
+    
+        // Warna khusus untuk setiap kategori
+        const umkmColors = {
+            "Total": "darkgreen",
+            "B": "darkorange",
+            "C": "red",
+            "D": "yellow",
+            "E": "darkblue",
+            "F": "orange",
+            "G": "lightblue",
+            "H": "orange",
+            "I": "darkred",
+            "J": "lightcoral",
+            "K": "blue",
+            "L": "darkblue",
+            "M": "green",
+            "N": "darkblue",
+            "P": "red",
+            "Q": "blue",
+            "R": "green",
+            "S": "black"
+        };
+    
+        // Menyiapkan dataset
+        const datasets = Object.keys(dataumkm).map(umkm => ({
+            label: umkm,
+            data: dataumkm[umkm],
+            backgroundColor: umkmColors[umkm],
+            borderColor: umkmColors[umkm],
+            borderWidth: 1
+        }));
+    
+        // Membuat grafik
+        const ctx = document.getElementById('stackedBarChart').getContext('2d');
+        const stackedBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                },
+                scales: {
+                    x: {
+                        stacked: true // Mengaktifkan stack pada sumbu X
+                    },
+                    y: {
+                        stacked: true, // Mengaktifkan stack pada sumbu Y
+                        beginAtZero: true,
+                        max: 5000 //limit Y-Axis
+                    }
+                }
+            }
+        });
+    </script>
+  </div>
+
+<!-- Tabel -->
+<div class="container mx-auto mt-6 bg-white p-4 shadow rounded">
+    <h2 class="text-lg font-semibold mb-4">Data Tabel</h2>
+    <div class="overflow-y-auto h-80 border rounded"> <!-- Kontainer dengan scroll -->
+      <table class="table-auto w-full border">
+        <thead class="bg-white-200">
+        <tr>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">Kecamatan</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">B</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">C</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">D</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">E</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">F</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">G</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">H</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">I</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">J</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">K</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">L</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">M</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">N</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">P</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">Q</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">R</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">S</td>
+            <td class="bg-green-200 px-4 py-2 border border-gray-300">Total Usaha</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Moro</td>
+            <td class="px-4 py-2 border border-gray-300">17</td>
+            <td class="px-4 py-2 border border-gray-300">204</td>
+            <td class="px-4 py-2 border border-gray-300">11</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">425</td>
+            <td class="px-4 py-2 border border-gray-300">30</td>
+            <td class="px-4 py-2 border border-gray-300">206</td>
+            <td class="px-4 py-2 border border-gray-300">13</td>
+            <td class="px-4 py-2 border border-gray-300">4</td>
+            <td class="px-4 py-2 border border-gray-300">13</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">64</td>
+            <td class="px-4 py-2 border border-gray-300">1002</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Durai</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">187</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">239</td>
+            <td class="px-4 py-2 border border-gray-300">24</td>
+            <td class="px-4 py-2 border border-gray-300">103</td>
+            <td class="px-4 py-2 border border-gray-300">19</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">4</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">24</td>
+            <td class="px-4 py-2 border border-gray-300">615</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Sugie Besar</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">149</td>
+            <td class="px-4 py-2 border border-gray-300">27</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">211</td>
+            <td class="px-4 py-2 border border-gray-300">9</td>
+            <td class="px-4 py-2 border border-gray-300">77</td>
+            <td class="px-4 py-2 border border-gray-300">5</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">7</td>
+            <td class="px-4 py-2 border border-gray-300">501</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Kundur</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">496</td>
+            <td class="px-4 py-2 border border-gray-300">13</td>
+            <td class="px-4 py-2 border border-gray-300">13</td>
+            <td class="px-4 py-2 border border-gray-300">7</td>
+            <td class="px-4 py-2 border border-gray-300">1115</td>
+            <td class="px-4 py-2 border border-gray-300">109</td>
+            <td class="px-4 py-2 border border-gray-300">441</td>
+            <td class="px-4 py-2 border border-gray-300">30</td>
+            <td class="px-4 py-2 border border-gray-300">8</td>
+            <td class="px-4 py-2 border border-gray-300">53</td>
+            <td class="px-4 py-2 border border-gray-300">8</td>
+            <td class="px-4 py-2 border border-gray-300">29</td>
+            <td class="px-4 py-2 border border-gray-300">41</td>
+            <td class="px-4 py-2 border border-gray-300">32</td>
+            <td class="px-4 py-2 border border-gray-300">22</td>
+            <td class="px-4 py-2 border border-gray-300">145</td>
+            <td class="px-4 py-2 border border-gray-300">2565</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Kundur Utara</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">210</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">26</td>
+            <td class="px-4 py-2 border border-gray-300">4</td>
+            <td class="px-4 py-2 border border-gray-300">369</td>
+            <td class="px-4 py-2 border border-gray-300">34</td>
+            <td class="px-4 py-2 border border-gray-300">125</td>
+            <td class="px-4 py-2 border border-gray-300">4</td>
+            <td class="px-4 py-2 border border-gray-300">5</td>
+            <td class="px-4 py-2 border border-gray-300">11</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">19</td>
+            <td class="px-4 py-2 border border-gray-300">21</td>
+            <td class="px-4 py-2 border border-gray-300">11</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">63</td>
+            <td class="px-4 py-2 border border-gray-300">912</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Kundur Barat</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">389</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">10</td>
+            <td class="px-4 py-2 border border-gray-300">12</td>
+            <td class="px-4 py-2 border border-gray-300">523</td>
+            <td class="px-4 py-2 border border-gray-300">31</td>
+            <td class="px-4 py-2 border border-gray-300">255</td>
+            <td class="px-4 py-2 border border-gray-300">20</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">11</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">22</td>
+            <td class="px-4 py-2 border border-gray-300">29</td>
+            <td class="px-4 py-2 border border-gray-300">13</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">61</td>
+            <td class="px-4 py-2 border border-gray-300">1388</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Ungar</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">151</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">201</td>
+            <td class="px-4 py-2 border border-gray-300">49</td>
+            <td class="px-4 py-2 border border-gray-300">60</td>
+            <td class="px-4 py-2 border border-gray-300">23</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">9</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">18</td>
+            <td class="px-4 py-2 border border-gray-300">5</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">15</td>
+            <td class="px-4 py-2 border border-gray-300">552</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Belat</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">89</td>
+            <td class="px-4 py-2 border border-gray-300">4</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">184</td>
+            <td class="px-4 py-2 border border-gray-300">36</td>
+            <td class="px-4 py-2 border border-gray-300">59</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">8</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">17</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">15</td>
+            <td class="px-4 py-2 border border-gray-300">427</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Karimun</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">575</td>
+            <td class="px-4 py-2 border border-gray-300">8</td>
+            <td class="px-4 py-2 border border-gray-300">67</td>
+            <td class="px-4 py-2 border border-gray-300">11</td>
+            <td class="px-4 py-2 border border-gray-300">1807</td>
+            <td class="px-4 py-2 border border-gray-300">114</td>
+            <td class="px-4 py-2 border border-gray-300">1011</td>
+            <td class="px-4 py-2 border border-gray-300">59</td>
+            <td class="px-4 py-2 border border-gray-300">29</td>
+            <td class="px-4 py-2 border border-gray-300">157</td>
+            <td class="px-4 py-2 border border-gray-300">27</td>
+            <td class="px-4 py-2 border border-gray-300">41</td>
+            <td class="px-4 py-2 border border-gray-300">87</td>
+            <td class="px-4 py-2 border border-gray-300">38</td>
+            <td class="px-4 py-2 border border-gray-300">20</td>
+            <td class="px-4 py-2 border border-gray-300">281</td>
+            <td class="px-4 py-2 border border-gray-300">4336</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Buru</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">311</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">10</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">333</td>
+            <td class="px-4 py-2 border border-gray-300">31</td>
+            <td class="px-4 py-2 border border-gray-300">87</td>
+            <td class="px-4 py-2 border border-gray-300">10</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">8</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">52</td>
+            <td class="px-4 py-2 border border-gray-300">857</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Meral</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">602</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">16</td>
+            <td class="px-4 py-2 border border-gray-300">29</td>
+            <td class="px-4 py-2 border border-gray-300">1180</td>
+            <td class="px-4 py-2 border border-gray-300">63</td>
+            <td class="px-4 py-2 border border-gray-300">493</td>
+            <td class="px-4 py-2 border border-gray-300">48</td>
+            <td class="px-4 py-2 border border-gray-300">4</td>
+            <td class="px-4 py-2 border border-gray-300">78</td>
+            <td class="px-4 py-2 border border-gray-300">14</td>
+            <td class="px-4 py-2 border border-gray-300">46</td>
+            <td class="px-4 py-2 border border-gray-300">50</td>
+            <td class="px-4 py-2 border border-gray-300">27</td>
+            <td class="px-4 py-2 border border-gray-300">7</td>
+            <td class="px-4 py-2 border border-gray-300">172</td>
+            <td class="px-4 py-2 border border-gray-300">2837</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Tebing</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">380</td>
+            <td class="px-4 py-2 border border-gray-300">4</td>
+            <td class="px-4 py-2 border border-gray-300">12</td>
+            <td class="px-4 py-2 border border-gray-300">12</td>
+            <td class="px-4 py-2 border border-gray-300">729</td>
+            <td class="px-4 py-2 border border-gray-300">22</td>
+            <td class="px-4 py-2 border border-gray-300">394</td>
+            <td class="px-4 py-2 border border-gray-300">27</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">52</td>
+            <td class="px-4 py-2 border border-gray-300">5</td>
+            <td class="px-4 py-2 border border-gray-300">29</td>
+            <td class="px-4 py-2 border border-gray-300">32</td>
+            <td class="px-4 py-2 border border-gray-300">5</td>
+            <td class="px-4 py-2 border border-gray-300">5</td>
+            <td class="px-4 py-2 border border-gray-300">152</td>
+            <td class="px-4 py-2 border border-gray-300">1863</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Meral Barat</td>
+            <td class="px-4 py-2 border border-gray-300">9</td>
+            <td class="px-4 py-2 border border-gray-300">112</td>
+            <td class="px-4 py-2 border border-gray-300">4</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">7</td>
+            <td class="px-4 py-2 border border-gray-300">422</td>
+            <td class="px-4 py-2 border border-gray-300">10</td>
+            <td class="px-4 py-2 border border-gray-300">259</td>
+            <td class="px-4 py-2 border border-gray-300">16</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">11</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">20</td>
+            <td class="px-4 py-2 border border-gray-300">6</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">59</td>
+            <td class="px-4 py-2 border border-gray-300">938</td>
+        </tr>
+        <tr>
+            <td class="px-4 py-2 border border-gray-300">Selat Gelam</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">124</td>
+            <td class="px-4 py-2 border border-gray-300">4</td>
+            <td class="px-4 py-2 border border-gray-300">5</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">105</td>
+            <td class="px-4 py-2 border border-gray-300">37</td>
+            <td class="px-4 py-2 border border-gray-300">44</td>
+            <td class="px-4 py-2 border border-gray-300">5</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">1</td>
+            <td class="px-4 py-2 border border-gray-300">2</td>
+            <td class="px-4 py-2 border border-gray-300">5</td>
+            <td class="px-4 py-2 border border-gray-300">3</td>
+            <td class="px-4 py-2 border border-gray-300">0</td>
+            <td class="px-4 py-2 border border-gray-300">10</td>
+            <td class="px-4 py-2 border border-gray-300">145</td>
+        </tr>
+        <tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
+</body>
+</html>
